@@ -25,6 +25,7 @@
             searchForm: true,
             sidebar: true,
             breadcrumb: true,
+            internationalization: true,
             allowedActions: {
                 upload: true,
                 rename: true,

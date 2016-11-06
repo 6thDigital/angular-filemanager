@@ -1,9 +1,10 @@
 {
-  "name": "angular-filemanager",
-  "version": "1.5.1",
-  "homepage": "https://github.com/joni2back/angular-filemanager",
+  "name": "ngfilemanager",
+  "version": "1.0.0",
+  "homepage": "https://github.com/6thDigital/angular-filemanager",
   "authors": [
-    "Jonas Sciangula Street <joni2back@gmail.com>"
+    "Jonas Sciangula Street <joni2back@gmail.com>",
+    "Will Fairclough <wfairclough@gmail.com>"
   ],
   "description": "A very smart filemanager to manage your files in the browser.",
   "main": "js/app.js",

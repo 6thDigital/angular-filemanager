@@ -8,6 +8,10 @@ body {
   outline: 0!important;
 }
 
+#ng-filemanager {
+  background-color: white;
+}
+
 .navbar {
   min-height: 32px;
   margin-bottom: 0;
