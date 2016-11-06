@@ -8,11 +8,11 @@ body {
   outline: 0!important;
 }
 
-#ng-filemanager {
+.ng-filemanager {
   background-color: white;
 }
 
-.navbar {
+.ng-filemanager .navbar {
   min-height: 32px;
   margin-bottom: 0;
   border: 0;
@@ -20,16 +20,16 @@ body {
   color: #fff;
 }
 
-.navbar .navbar-collapse {
+.ng-filemanager .navbar .navbar-collapse {
   overflow: visible;
   padding: 0;
 }
 
-.navbar .navbar-toggle {
+.ng-filemanager .navbar .navbar-toggle {
   padding: 5px 10px;
 }
 
-.navbar .navbar-brand {
+.ng-filemanager .navbar .navbar-brand {
   font-size: inherit;
   height: 55px;
   line-height: 100%;
@@ -74,26 +74,26 @@ textarea.code {
   margin-top: -5px;
 }
 
-.nav-sidebar {
+.ng-filemanager .nav-sidebar {
   margin-right: -21px;
   margin-bottom: 20px;
   margin-left: -20px;
 }
 
 
-.nav-sidebar > li > a {
+.ng-filemanager .nav-sidebar > li > a {
   color: #7a7a7a;
   padding: 7px 0 7px 16px;
 }
 
 
-.nav-sidebar> li > a:hover, 
-.nav-sidebar> li > a:focus {
+.ng-filemanager .nav-sidebar> li > a:hover, 
+.ng-filemanager .nav-sidebar> li > a:focus {
   background: none;
   color: #1378b9;
 }
 
-.nav-sidebar > li.active > a {
+.ng-filemanager .nav-sidebar > li.active > a {
   color: #2196F3;
 }
 
@@ -213,19 +213,19 @@ textarea.code {
   background-color: #888;
 }
 
-.dropdown-menu {
+.ng-filemanager .dropdown-menu {
   font-size: 14px;
 }
 
-.dropdown-menu > li > a {
+.ng-filemanager .dropdown-menu > li > a {
   padding: 6px 20px;
 }
 
-.dropdown-menu > li > a > i {
+.ng-filemanager .dropdown-menu > li > a > i {
   margin-right: 4px;
 }
 
-.dropdown-menu.dropdown-right-click {
+.ng-filemanager .dropdown-menu.dropdown-right-click {
   display: block;
   position: static;
   margin-bottom: 5px; 
@@ -379,24 +379,24 @@ table th > a:focus {
   font-size: 10px;
 }
 
-.navbar .btn.btn-flat {
+.ng-filemanager .navbar .btn.btn-flat {
   padding: 2px;
   width: 32px;
   height: 30px;
   margin-left: 5px;
 }
 
-.navbar-inverse .navbar-toggle .icon-bar {
+.ng-filemanager .navbar-inverse .navbar-toggle .icon-bar {
   background: #fff;
 }
 
-.navbar-inverse .navbar-form input[type="text"] {
+.ng-filemanager .navbar-inverse .navbar-form input[type="text"] {
   color: #7a7a7a;
   box-shadow: none;
   margin: 0 10px;
 }
 
-.navbar .navbar-form {
+.ng-filemanager .navbar .navbar-form {
   border-bottom: none;
   border-top: none;
   box-shadow: none;
@@ -404,7 +404,7 @@ table th > a:focus {
   margin: 12px 0;
 }
 
-.breadcrumb {
+.ng-filemanager .breadcrumb {
   background: none; 
   padding: 0;
   font-size: 17px;
@@ -413,12 +413,12 @@ table th > a:focus {
   max-height: 30px
 }
 
-.breadcrumb>.active,
-.breadcrumb a {
+.ng-filemanager .breadcrumb>.active,
+.ng-filemanager .breadcrumb a {
   color: #fff;
 }
 
-.breadcrumb>li+li:before {
+.ng-filemanager .breadcrumb>li+li:before {
   font-family: 'Glyphicons Halflings';
   content: "\e080";
   font-size: 12px;
