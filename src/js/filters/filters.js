@@ -23,7 +23,7 @@
             if (input instanceof Date) {
                 return input.toISOString().substring(0, 19).replace('T', ' ');
             } else {
-                var strDate = input.toString();//(input.toLocaleString || input.toString).apply(input);
+                var strDate =(input.toLocaleString || input.toString).apply(input);
                 var date = new Date(strDate);
                 if ( Object.prototype.toString.call(date) === '[object Date]' ) {
                   // it is a date

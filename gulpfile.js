@@ -14,8 +14,8 @@ var path = require('path');
 var src = 'src/';
 var dst = 'dist/';
 var tplPath = 'src/templates'; //must be same as fileManagerConfig.tplPath
-var jsFile = 'angular-filemanager.min.js';
-var cssFile = 'angular-filemanager.min.css';
+var jsFile = 'ng-filemanager.min.js';
+var cssFile = 'ng-filemanager.min.css';
 
 gulp.task('clean', function (cb) {
   del(dst + '/*', cb);
