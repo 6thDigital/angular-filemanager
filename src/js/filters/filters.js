@@ -19,9 +19,20 @@
 
     app.filter('formatDate', ['$filter', function() {
         return function(input) {
-            return input instanceof Date ?
-                input.toISOString().substring(0, 19).replace('T', ' ') :
-                (input.toLocaleString || input.toString).apply(input);
+            if (input instanceof Date) {
+                return input.toISOString().substring(0, 19).replace('T', ' ');
+            } else {
+                var strDate = (input.toLocaleString || input.toString).apply(input);
+                var date = new Date(strDate);
+                if ( Object.prototype.toString.call(date) === '[object Date]' ) {
+                  // it is a date
+                  if ( !isNaN( date.getTime() ) ) {  
+                    // date is valid
+                    return date.toISOString().substring(0, 19).replace('T', ' ');
+                  }
+                }
+                return strDate;
+            }
         };
     }]);
 
