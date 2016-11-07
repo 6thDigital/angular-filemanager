@@ -213,33 +213,33 @@ body .ng-filemanager {
   background-color: #888;
 }
 
-.ng-filemanager .dropdown-menu {
+.dropdown-menu {
   font-size: 14px;
 }
 
-.ng-filemanager .dropdown-menu > li > a {
+.dropdown-menu > li > a {
   padding: 6px 20px;
 }
 
-.ng-filemanager .dropdown-menu > li > a > i {
+.dropdown-menu > li > a > i {
   margin-right: 4px;
 }
 
-.ng-filemanager .dropdown-menu.dropdown-right-click {
+.dropdown-menu.dropdown-right-click {
   display: block;
   position: static;
   margin-bottom: 5px; 
 }
 
-.ng-filemanager .dropdown-menu.dropdown-right-click .divider {
+.dropdown-menu.dropdown-right-click .divider {
   margin: 3px 0;
 }
 
-.ng-filemanager .upload-dragover .main {
+.upload-dragover .main {
   opacity: .4;
 }
 
-.ng-filemanager .upload-dragover:before {
+.upload-dragover:before {
   content: "\e198";
   position: absolute;
   left: 50%;

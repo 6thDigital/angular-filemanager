@@ -12,22 +12,45 @@
     });
 
     $(window.document).on('click', function() {
-        $('#context-menu').hide();
+        $('#ng-filemanager-context-menu').hide();
     });
 
     $(window.document).on('contextmenu', '.main-navigation .table-files tr.item-list:has("td"), .item-list', function(e) {
-        var menu = $('#context-menu');
+        var menu = $('#ng-filemanager-context-menu');
 
-        if (e.pageX >= window.innerWidth - menu.width()) {
-            e.pageX -= menu.width();
+        function setContextMenuPostion(event, contextMenu) {
+
+            var mousePosition = {};
+            var menuPostion = {};
+            var menuDimension = {};
+
+            menuDimension.x = contextMenu.outerWidth();
+            menuDimension.y = contextMenu.outerHeight();
+            mousePosition.x = event.pageX;
+            mousePosition.y = event.pageY;
+
+            if (mousePosition.x + menuDimension.x > $(window).width() + $(window).scrollLeft()) {
+                menuPostion.x = mousePosition.x - menuDimension.x;
+            } else {
+                menuPostion.x = mousePosition.x;
+            }
+
+            if (mousePosition.y + menuDimension.y > $(window).height() + $(window).scrollTop()) {
+                menuPostion.y = mousePosition.y - menuDimension.y;
+            } else {
+                menuPostion.y = mousePosition.y;
+            }
+
+            return menuPostion;
         }
-        if (e.pageY >= window.innerHeight - menu.height()) {
-            e.pageY -= menu.height();
-        }
+
+        var pos = setContextMenuPostion(e, menu);
 
         menu.hide().css({
-            left: e.pageX,
-            top: e.pageY
+          // display: 'block',
+          left: pos.x,
+          top: pos.y,
+          position: 'absolute'
         }).appendTo('body').show();
         e.preventDefault();
     });
