@@ -1,8 +1,8 @@
 (function(angular, $) {
     'use strict';
     angular.module('FileManagerApp').controller('FileManagerCtrl', [
-        '$scope', '$rootScope', '$window', '$translate', 'fileManagerConfig', 'item', 'fileNavigator', 'apiMiddleware',
-        function($scope, $rootScope, $window, $translate, fileManagerConfig, Item, FileNavigator, ApiMiddleware) {
+        '$scope', '$rootScope', '$log', '$window', '$translate', 'fileManagerConfig', 'item', 'fileNavigator', 'apiMiddleware',
+        function($scope, $rootScope, $log, $window, $translate, fileManagerConfig, Item, FileNavigator, ApiMiddleware) {
 
         var $storage = $window.localStorage;
         $scope.config = fileManagerConfig;
@@ -34,6 +34,11 @@
             $scope.temps = [];
             $scope.query = '';
             $rootScope.selectedModalPath = $scope.fileNavigator.currentPath;
+        };
+
+        $scope.showMore = function() {
+            $log.debug('showMore');
+            $scope.fileNavigator.loadNext();
         };
 
         $scope.setTemplate = function(name) {

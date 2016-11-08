@@ -1,12 +1,14 @@
 (function(angular) {
     'use strict';
     angular.module('FileManagerApp').service('fileNavigator', [
-        'apiMiddleware', 'fileManagerConfig', 'item', function (ApiMiddleware, fileManagerConfig, Item) {
+        'apiMiddleware', 'fileManagerConfig', 'item', '$log', '$timeout', function (ApiMiddleware, fileManagerConfig, Item, $log, $timeout) {
 
         var FileNavigator = function() {
             this.apiMiddleware = new ApiMiddleware();
             this.requesting = false;
+            this.requestingNext = false;
             this.fileList = [];
+            this.next = {}; // The next page to request
             this.currentPath = this.getBasePath();
             this.history = [];
             this.error = '';
@@ -45,7 +47,10 @@
         };
 
         FileNavigator.prototype.list = function() {
-            return this.apiMiddleware.list(this.currentPath, this.deferredHandler.bind(this));
+            $log.debug('next: ');
+            $log.debug(this.next);
+            var cursor = this.next && this.next.cursor || null;
+            return this.apiMiddleware.list(this.currentPath, this.deferredHandler.bind(this), cursor);
         };
 
         FileNavigator.prototype.refresh = function() {
@@ -56,14 +61,43 @@
             var path = self.currentPath.join('/');
             self.requesting = true;
             self.fileList = [];
+            self.next = null;
             return self.list().then(function(data) {
                 self.fileList = (data.result || []).map(function(file) {
                     return new Item(file, self.currentPath);
                 });
+                self.next = data.next;
                 self.buildTree(path);
                 self.onRefresh();
             }).finally(function() {
                 self.requesting = false;
+            });
+        };
+
+        FileNavigator.prototype.loadNext = function() {
+            var self = this;
+            if ( ! self.next || self.requesting || self.requestingNext ) {
+                $log.debug('No Next or already requesting');
+                return;
+            }
+            if (! self.currentPath.length) {
+                self.currentPath = this.getBasePath();
+            }
+            var path = self.currentPath;
+            self.requestingNext = true;
+            return self.list().then(function(data) {
+                $timeout(function() {
+                    (data.result || []).forEach(function(file) {
+                        self.fileList.push(new Item(file, self.currentPath));
+                    });
+                    self.next = data.next;
+                    self.buildTree(path);
+                    self.onRefresh();
+                }, 500);
+            }).finally(function() {
+                $timeout(function() {
+                    self.requestingNext = false;
+                }, 500);
             });
         };
         

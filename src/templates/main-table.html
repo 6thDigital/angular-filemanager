@@ -13,9 +13,15 @@
                     <span class="sortorder" ng-show="predicate[1] === 'model.size'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
+            <th class="hidden-sm hidden-xs" ng-hide="config.hideContentType">
+                <a href="" ng-click="order('model.contentType')">
+                    {{"contentType" | translate}}
+                    <span class="sortorder" ng-show="predicate[1] === 'model.contentType'" ng-class="{reverse:reverse}"></span>
+                </a>
+            </th>
             <th class="hidden-sm hidden-xs" ng-hide="config.hideDate">
                 <a href="" ng-click="order('model.date')">
-                    {{"date" | translate}}
+                    {{"dateLastModified" | translate}}
                     <span class="sortorder" ng-show="predicate[1] === 'model.date'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
@@ -29,17 +35,17 @@
     </thead>
     <tbody class="file-item">
         <tr ng-show="fileNavigator.requesting">
-            <td colspan="5">
+            <td colspan="6">
                 <div ng-include="config.tplPath + '/spinner.html'"></div>
             </td>
         </tr>
         <tr ng-show="!fileNavigator.requesting &amp;&amp; fileNavigator.fileList.length < 1 &amp;&amp; !fileNavigator.error">
-            <td colspan="5">
+            <td colspan="6">
                 {{"no_files_in_folder" | translate}}...
             </td>
         </tr>
         <tr ng-show="!fileNavigator.requesting &amp;&amp; fileNavigator.error">
-            <td colspan="5">
+            <td colspan="6">
                 {{ fileNavigator.error }}
             </td>
         </tr>
@@ -48,19 +54,33 @@
                 <a href="" title="{{item.model.name}} ({{item.model.size | humanReadableFileSize}})">
                     <i class="glyphicon glyphicon-folder-close" ng-show="item.model.type === 'dir'"></i>
                     <i class="glyphicon glyphicon-file" ng-show="item.model.type === 'file'"></i>
-                    {{item.model.name | strLimit : 64}}
+                    {{ item.model.name | strLimit : 64 }}
                 </a>
             </td>
             <td class="hidden-xs">
                 <span ng-show="item.model.type !== 'dir' || config.showSizeForDirectories">
-                    {{item.model.size | humanReadableFileSize}}
+                    {{ item.isFolder() ? '-' : item.model.size | humanReadableFileSize }}
+                </span>
+                <span ng-show="item.model.type === 'dir' && !config.showSizeForDirectories">
+                    {{ '-' }}
                 </span>
             </td>
+            <td class="hidden-sm hidden-xs" ng-hide="config.hideContentType">
+                <p ng-if="item.isFolder()">{{ "folder" | translate }}</p>
+                <p ng-if="!item.isFolder()">{{ item.model.contentType }}</p>
+            </td>
             <td class="hidden-sm hidden-xs" ng-hide="config.hideDate">
-                {{item.model.updated | formatDate }}
+                {{ item.isFolder() ? '-' : item.model.updated | formatDate }}
             </td>
             <td class="hidden-sm hidden-xs" ng-hide="config.hidePermissions">
-                {{item.model.perms.toCode(item.model.type === 'dir'?'d':'-')}}
+                {{ item.model.perms.toCode(item.model.type === 'dir'?'d':'-')}}
+            </td>
+        </tr>
+        <tr ng-show="fileNavigator.requestingNext">
+            <td colspan="6">
+                <span>
+                    <i class="fa fa-refresh fa-spin"></i> Loading...
+                </span>
             </td>
         </tr>
     </tbody>

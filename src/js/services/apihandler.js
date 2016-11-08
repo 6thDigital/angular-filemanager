@@ -33,13 +33,14 @@
             return deferred.resolve(data);
         };
 
-        ApiHandler.prototype.list = function(apiUrl, path, customDeferredHandler, exts) {
+        ApiHandler.prototype.list = function(apiUrl, path, customDeferredHandler, exts, cursor) {
             var self = this;
             var dfHandler = customDeferredHandler || self.deferredHandler;
             var deferred = $q.defer();
             var data = {
                 action: 'list',
                 path: path,
+                cursor: cursor,
                 fileExtensions: exts && exts.length ? exts : undefined
             };
 

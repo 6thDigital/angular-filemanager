@@ -4,13 +4,22 @@
 
         var Item = function(model, path) {
             var rawModel = {
+                self: model && model.self || '',
                 name: model && model.name || '',
                 path: path || [],
                 type: model && model.type || 'file',
                 size: model && parseInt(model.size || 0),
-                date: parseMySQLDate(model && model.date),
-                perms: new Chmod(model && model.rights),
+                md5: model && model.md5 || '',
                 content: model && model.content || '',
+                contentType: model && model.contentType || '',
+                contentLanguage: model && model.contentLanguage || '',
+                contentEncoding: model && model.contentEncoding || '',
+                cacheControl: model && model.cacheControl || '',
+                metadata: model && model.metadata || {},
+                created: new Date(model && model.created),
+                updated: new Date(model && model.updated),
+                deleted: new Date(model && model.deleted),
+                perms: new Chmod(model && model.rights),
                 recursive: false,
                 fullPath: function() {
                     var path = this.path.filter(Boolean);
@@ -23,11 +32,6 @@
 
             this.model = angular.copy(rawModel);
             this.tempModel = angular.copy(rawModel);
-
-            function parseMySQLDate(mysqlDate) {
-                var d = (mysqlDate || '').toString().split(/[- :]/);
-                return new Date(d[0], d[1] - 1, d[2], d[3], d[4], d[5]);
-            }
         };
 
         Item.prototype.update = function() {
