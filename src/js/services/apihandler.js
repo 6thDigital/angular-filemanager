@@ -127,10 +127,12 @@
             var deferred = $q.defer();
             self.inprocess = true;
             self.progress = 0;
+            self.progressIndeterminate = false;
             self.error = '';
 
             var data = {
-                destination: destination
+                destination: destination,
+                count: files.length
             };
 
             for (var i = 0; i < files.length; i++) {
@@ -146,7 +148,10 @@
                 }, function (data) {
                     self.deferredHandler(data.data, deferred, data.status, 'Unknown error uploading files');
                 }, function (evt) {
-                    self.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total)) - 1;
+                    $log.debug('Progress:');
+                    $log.debug(evt);
+                    self.progress = Math.max(Math.min(100, parseInt(100.0 * evt.loaded / evt.total)) - 1, 0);
+                    self.progressIndeterminate = self.progress >= 99;
                 })['finally'](function() {
                     self.inprocess = false;
                     self.progress = 0;

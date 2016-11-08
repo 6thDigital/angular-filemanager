@@ -294,7 +294,7 @@
                 <div ng-show="apiMiddleware.apiHandler.inprocess">
                   <em>{{"uploading" | translate}}... {{apiMiddleware.apiHandler.progress}}%</em>
                   <div class="progress mb0">
-                    <div class="progress-bar active" role="progressbar" aria-valuenow="{{apiMiddleware.apiHandler.progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{apiMiddleware.apiHandler.progress}}%"></div>
+                    <div class="progress-bar active" ng-class="{'progress-bar-striped indeterminate': apiMiddleware.apiHandler.progressIndeterminate === true}" role="progressbar" aria-valuenow="{{apiMiddleware.apiHandler.progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{apiMiddleware.apiHandler.progress}}%"></div>
                   </div>
                 </div>
               </div>
