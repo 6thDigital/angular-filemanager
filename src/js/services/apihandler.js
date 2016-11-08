@@ -1,7 +1,7 @@
 (function(angular, $) {
     'use strict';
-    angular.module('FileManagerApp').service('apiHandler', ['$http', '$q', '$window', '$translate', 'Upload',
-        function ($http, $q, $window, $translate, Upload) {
+    angular.module('FileManagerApp').service('apiHandler', ['$http', '$q', '$window', '$translate', 'Upload', '$log',
+        function ($http, $q, $window, $translate, Upload, $log) {
 
         $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -18,10 +18,10 @@
             if (code == 404) {
                 this.error = 'Error 404 - Backend bridge is not working, please check the ajax response.';
             }
-            if (data.result && data.result.error) {
+            if (data && data.result && data.result.error) {
                 this.error = data.result.error;
             }
-            if (!this.error && data.error) {
+            if (!this.error && data && data.error) {
                 this.error = data.error.message;
             }
             if (!this.error && defaultMsg) {
@@ -218,34 +218,54 @@
             return deferred.promise;
         };
 
-        ApiHandler.prototype.getUrl = function(apiUrl, path) {
+        ApiHandler.prototype.getUrl = function(apiUrl, path, expiry) {
+            var self = this;
+            var deferred = $q.defer();
             var data = {
                 action: 'download',
-                path: path
+                path: path,
+                expiry: expiry
             };
-            return path && [apiUrl, $.param(data)].join('?');
+            self.inprocess = true;
+            $http.post(apiUrl, data).success(function(data, code) {
+                $log.debug('Got URL: ' + data.url);
+               self.deferredHandler(data, deferred, code);
+            }).error(function(data, code) {
+                self.deferredHandler(data, deferred, code, $translate.instant('error_downloading'));   
+            })['finally'](function() {
+                self.inprocess = false;
+            });
+            return deferred.promise;
         };
 
         ApiHandler.prototype.download = function(apiUrl, itemPath, toFilename, downloadByAjax, forceNewWindow) {
             var self = this;
-            var url = this.getUrl(apiUrl, itemPath);
-
-            if (!downloadByAjax || forceNewWindow || !$window.saveAs) {
-                !$window.saveAs && $window.console.log('Your browser dont support ajax download, downloading by default');
-                return !!$window.open(url, '_blank', '');
-            }
-            
             var deferred = $q.defer();
-            self.inprocess = true;
-            $http.get(url).success(function(data) {
-                var bin = new $window.Blob([data]);
-                deferred.resolve(data);
-                $window.saveAs(bin, toFilename);
-            }).error(function(data, code) {
-                self.deferredHandler(data, deferred, code, $translate.instant('error_downloading'));
-            })['finally'](function() {
-                self.inprocess = false;
-            });
+            this.getUrl(apiUrl, itemPath)
+                .then(function(resp) {
+                    $log.debug('download url: ' + resp.url);
+                    if (!downloadByAjax || forceNewWindow || !$window.saveAs) {
+                        !$window.saveAs && $window.console.log('Your browser dont support ajax download, downloading by default');
+                        return !!$window.open(resp.url, '_blank', '');
+                    }
+
+                    $log.debug('ajax download: ' + resp.url);
+                    self.inprocess = true;
+                    $http.get(resp.url).success(function(data) {
+                        var bin = new $window.Blob([data]);
+                        deferred.resolve(data);
+                        $window.saveAs(bin, toFilename);
+                    }).error(function(data, code) {
+                        self.deferredHandler(data, deferred, code, $translate.instant('error_downloading'));
+                    })['finally'](function() {
+                        self.inprocess = false;
+                    });
+                })
+                .catch(function(data, code) {
+                    self.deferredHandler(data, deferred, code, $translate.instant('error_downloading'));   
+                })['finally'](function() {
+                    self.inprocess = false;
+                });
             return deferred.promise;
         };
 

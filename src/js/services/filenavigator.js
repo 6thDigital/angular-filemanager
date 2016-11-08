@@ -47,8 +47,6 @@
         };
 
         FileNavigator.prototype.list = function() {
-            $log.debug('next: ');
-            $log.debug(this.next);
             var cursor = this.next && this.next.cursor || null;
             return this.apiMiddleware.list(this.currentPath, this.deferredHandler.bind(this), cursor);
         };

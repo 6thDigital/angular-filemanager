@@ -37,7 +37,6 @@
         };
 
         $scope.showMore = function() {
-            $log.debug('showMore');
             $scope.fileNavigator.loadNext();
         };
 
@@ -146,23 +145,31 @@
             if (item.isEditable()) {
                 return $scope.openEditItem(item);
             }
+
+            return $scope.apiMiddleware.download(item, true);
         };
 
         $scope.openImagePreview = function() {
             var item = $scope.singleSelection();
             $scope.apiMiddleware.apiHandler.inprocess = true;
-            $scope.modal('imagepreview', null, true)
+            $scope.apiMiddleware.getUrl(item)
+            .then(function(resp) {
+                $scope.modal('imagepreview', null, true)
                 .find('#imagepreview-target')
-                .attr('src', $scope.apiMiddleware.getUrl(item))
+                .attr('src', resp.url)
                 .unbind('load error')
                 .on('load error', function() {
                     $scope.apiMiddleware.apiHandler.inprocess = false;
                     $scope.$apply();
                 });
+            })
+            .catch(function() {
+
+            });
         };
 
-        $scope.openEditItem = function() {
-            var item = $scope.singleSelection();
+        $scope.openEditItem = function(item) {
+            item = item || $scope.singleSelection();
             $scope.apiMiddleware.getContent(item).then(function(data) {
                 item.tempModel.content = item.model.content = data.result;
             });
